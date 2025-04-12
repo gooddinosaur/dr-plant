@@ -1,6 +1,7 @@
 import requests
 
-API_KEY = "YOUR_OPENWEATHER_API_KEY"
+API_KEY = "f453040f74cc60b5166a170317ef1d36"
+
 
 def get_weather_by_ip():
     try:
@@ -14,6 +15,26 @@ def get_weather_by_ip():
 
         return {
             "city": city,
+            "temp": res["main"]["temp"],
+            "humidity": res["main"]["humidity"]
+        }
+    except:
+        return None
+
+
+def get_weather_by_city(city):
+    try:
+        url = (
+            f"https://api.openweathermap.org/data/2.5/weather?"
+            f"q={city}&appid={API_KEY}&units=metric"
+        )
+        res = requests.get(url).json()
+
+        if res.get("cod") != 200:
+            return None
+
+        return {
+            "city": res["name"],
             "temp": res["main"]["temp"],
             "humidity": res["main"]["humidity"]
         }

@@ -20,23 +20,3 @@ def get_weather_by_ip():
         }
     except:
         return None
-
-
-def get_weather_by_city(city):
-    try:
-        url = (
-            f"https://api.openweathermap.org/data/2.5/weather?"
-            f"q={city}&appid={API_KEY}&units=metric"
-        )
-        res = requests.get(url).json()
-
-        if res.get("cod") != 200:
-            return None
-
-        return {
-            "city": res["name"],
-            "temp": res["main"]["temp"],
-            "humidity": res["main"]["humidity"]
-        }
-    except:
-        return None

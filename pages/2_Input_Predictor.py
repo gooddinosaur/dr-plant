@@ -1,10 +1,6 @@
 import streamlit as st
-import joblib
 from utils.predictor import predict_health, generate_recommendations
 
-# โหลดโมเดลและ label encoder
-model = joblib.load("model/plant_health_model.pkl")
-le = joblib.load("model/label_encoder.pkl")
 
 st.header("🌱 Predict Your Plant's Health")
 
@@ -16,7 +12,7 @@ humidity = st.number_input("Humidity (%)", min_value=0.0, max_value=100.0, value
 
 # เมื่อกดปุ่ม Predict
 if st.button("Predict"):
-    result = predict_health(moisture, light, temperature, humidity, model, le)
+    result = predict_health(moisture, light, temperature, humidity)
     st.success(f"🩺 Prediction: **{result}**")
 
     st.markdown("### 🌱 Recommendations:")

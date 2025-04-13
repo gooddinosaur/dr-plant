@@ -5,8 +5,6 @@ from utils.weather import get_weather_by_ip
 st.set_page_config(page_title="Weather Info", page_icon="☀️", layout="centered")
 st.title("☀️ Real-time Weather Info")
 
-API_URL = "http://localhost:8000/weather"
-
 # ---- Section 1: Auto Weather from User IP ----
 st.subheader("📍 Your Current Location Weather")
 
@@ -29,11 +27,11 @@ st.subheader("🔎 Search Weather by City")
 with st.form("search_form"):
     city = st.text_input("🏙️ City (e.g., Bangkok)")
     submitted = st.form_submit_button("Get Weather")
-
+# เพิ่มเวลาที่เก็บข้อมูลด้วย
 if submitted:
     if city:
         try:
-            response = requests.get(API_URL, params={"city": city})
+            response = requests.get("http://localhost:8000/weather", params={"city": city})
             if response.status_code == 200:
                 data = response.json()
                 st.markdown(f"**📍 Location :** {data['city']}")

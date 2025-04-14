@@ -8,7 +8,6 @@ label_mapping = {0: "Healthy", 1: "Moderate Stress", 2: "High Stress"}
 
 
 def predict_health(moisture, light, temperature, humidity):
-    # เตรียมข้อมูล input
     features = np.array([[moisture, humidity, light, temperature]])
     scaled_features = scaler.transform(features)
     prediction = model.predict(scaled_features)

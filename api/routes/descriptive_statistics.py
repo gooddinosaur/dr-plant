@@ -35,6 +35,9 @@ def get_descriptive_statistics():
     if df.empty:
         raise HTTPException(status_code=404, detail="No data found.")
 
+    if 'id' in df.columns:
+        df = df.drop(columns=['id'])
+
     numeric_df = df.select_dtypes(include=['float64', 'int64'])
     desc_stats = numeric_df.describe().T.round(2).to_dict()
 

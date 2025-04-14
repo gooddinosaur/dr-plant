@@ -34,8 +34,6 @@ try:
             if metric in stats.index:
                 with st.expander(f"{metric.capitalize()}"):
                     metric_values = stats.loc[metric]
-
-
                     for column in stats.columns:
                         st.metric(
                             label=column.replace("_", " ").title(),
@@ -48,6 +46,7 @@ try:
         st.subheader("📈 Statistic Visualization")
 
         selected_metric = st.selectbox(
+            "📌 Select a metric to visualize",
             options=[m for m in metrics if m in stats.index]
         )
 
@@ -67,20 +66,20 @@ try:
             )
             st.plotly_chart(fig, use_container_width=True)
 
-    with st.expander("View Full Data Table"):
+    with st.expander("📄 View Full Data Table"):
         st.dataframe(stats, use_container_width=True)
         csv = stats.to_csv().encode('utf-8')
         st.download_button(
-            label="Download CSV",
+            label="📥 Download CSV",
             data=csv,
             file_name=f"plant_stats_{datetime.now().strftime('%Y%m%d')}.csv",
             mime="text/csv",
         )
 
 except requests.exceptions.RequestException as e:
-    st.error(f"Failed to fetch data: {e}")
-    st.info("Please check if the API server is running at the specified URL.")
+    st.error(f"❌ Failed to fetch data: {e}")
+    st.info("ℹ️ Please check if the API server is running at the specified URL.")
 except KeyError as ke:
-    st.error(f"Unexpected response format from API: {ke}")
+    st.error(f"❌ Unexpected response format from API: {ke}")
 except Exception as ex:
-    st.error(f"An error occurred: {ex}")
+    st.error(f"❌ An error occurred: {ex}")

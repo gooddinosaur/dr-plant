@@ -4,16 +4,14 @@ import requests
 import plotly.express as px
 from datetime import datetime
 
-# Page configuration
 st.set_page_config(
-    page_title="Plant Monitoring Dashboard",
-    page_icon="🌱",
+    page_title="Descriptive Statistics",
+    page_icon="📶",
     layout="wide"
 )
 
-# Header with styling
 st.markdown("""
-    <h1 style='text-align: center; color: #2E7D32;'>🌱 Descriptive Statistics</h1>
+    <h1 style='text-align: center;'>📶 Descriptive Statistics</h1>
 """, unsafe_allow_html=True)
 
 st.markdown("---")
@@ -21,28 +19,23 @@ st.markdown("---")
 API_URL = "http://localhost:8000/descriptive-stats"
 
 try:
-    # Display a spinner while loading data
     with st.spinner("Fetching data..."):
         response = requests.get(API_URL)
         response.raise_for_status()
         result = response.json()
         stats = pd.DataFrame(result).T
 
-    # Create columns for stat metrics
     col1, col2 = st.columns(2)
 
     with col1:
         st.subheader("📊 Summary Statistics")
-
-        # Display each metric in its own expandable section
         metrics = ["count", "mean", "std", "min", "25%", "50%", "75%", "max"]
-
         for metric in metrics:
             if metric in stats.index:
-                with st.expander(f"{metric.capitalize()} Values"):
+                with st.expander(f"{metric.capitalize()}"):
                     metric_values = stats.loc[metric]
 
-                    # Create a clean horizontal display for each sensor type
+
                     for column in stats.columns:
                         st.metric(
                             label=column.replace("_", " ").title(),
@@ -52,22 +45,18 @@ try:
                         )
 
     with col2:
-        st.subheader("📈 Visualization")
+        st.subheader("📈 Statistic Visualization")
 
-        # Create dropdown to select which metric to visualize
         selected_metric = st.selectbox(
-            "Select statistic to visualize:",
             options=[m for m in metrics if m in stats.index]
         )
 
         if selected_metric:
-            # Prepare data for chart
             chart_data = pd.DataFrame({
                 'Sensor': stats.columns,
                 'Value': stats.loc[selected_metric].values
             })
 
-            # Create bar chart
             fig = px.bar(
                 chart_data,
                 x='Sensor',
@@ -78,11 +67,8 @@ try:
             )
             st.plotly_chart(fig, use_container_width=True)
 
-    # Show full data table in expandable section
     with st.expander("View Full Data Table"):
         st.dataframe(stats, use_container_width=True)
-
-        # Add download button for CSV
         csv = stats.to_csv().encode('utf-8')
         st.download_button(
             label="Download CSV",

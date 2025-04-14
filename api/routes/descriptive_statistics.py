@@ -1,20 +1,8 @@
 from fastapi import APIRouter, HTTPException
 import pandas as pd
-from config import DB_HOST, DB_USER, DB_PASSWD, DB_NAME
-import pymysql
-from dbutils.pooled_db import PooledDB
+from api.database import pool
 
 router = APIRouter()
-
-pool = PooledDB(
-    creator=pymysql,
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWD,
-    database=DB_NAME,
-    maxconnections=10,
-    blocking=True
-)
 
 
 @router.get("/descriptive-stats")

@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import requests
-import plotly.express as px
 
 st.set_page_config(page_title="🔍 Attribute Relationship", layout="wide")
 
@@ -19,13 +18,10 @@ try:
     df = fetch_data()
     df["timestamp"] = pd.to_datetime(df["timestamp"])
 
-    attribute_options = [col.capitalize() for col in df.columns if
-                         col not in ["id", "timestamp"]]
+    attribute_options = [col.capitalize() for col in df.columns if col not in ["id", "timestamp"]]
 
-    x_attr = st.sidebar.selectbox("Select X-axis Attribute",
-                                  options=attribute_options, index=0)
-    y_attr = st.sidebar.selectbox("Select Y-axis Attribute",
-                                  options=attribute_options, index=1)
+    x_attr = st.sidebar.selectbox("Select X-axis Attribute", options=attribute_options, index=0)
+    y_attr = st.sidebar.selectbox("Select Y-axis Attribute", options=attribute_options, index=1)
 
     x_attr = x_attr.lower()
     y_attr = y_attr.lower()
@@ -37,17 +33,17 @@ try:
     if x_attr == y_attr:
         st.warning("Please select two different attributes.")
     else:
-        fig = px.scatter(
-            df, x=x_attr, y=y_attr,
-            title=f"{y_attr.capitalize()} vs {x_attr.capitalize()}",
-            labels={x_attr: x_attr.replace("_", " ").title(),
-                    y_attr: y_attr.replace("_", " ").title()},
-            trendline="ols"
-        )
-        st.plotly_chart(fig, use_container_width=True)
+        with st.spinner("Generating scatter plot..."):
+            image_url = f"http://localhost:8000/scatter-plot?x_attr={x_attr}&y_attr={y_attr}"
+            response = requests.get(image_url)
 
-        with st.expander("📄 View Raw Data"):
-            st.dataframe(df[[x_attr, y_attr]])
+        if response.status_code == 200:
+            st.image(response.content, caption=f"{y_attr.capitalize()} vs {x_attr.capitalize()}",
+                     width=1000)
+            with st.expander("📄 View Raw Data"):
+                st.dataframe(df[[x_attr, y_attr]])
+        else:
+            st.error(f"Failed to load scatter plot: {response.status_code} - {response.text}")
 
 except Exception as e:
     st.error(f"Error fetching or processing data: {e}")

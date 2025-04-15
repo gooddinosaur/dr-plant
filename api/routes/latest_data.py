@@ -9,7 +9,7 @@ def get_latest_data():
     try:
         conn = pool.connection()
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM drplant ORDER BY timestamp DESC LIMIT 1")
+            cursor.execute("SELECT * FROM drplantdata ORDER BY timestamp DESC LIMIT 1")
             columns = [desc[0] for desc in cursor.description]
             row = cursor.fetchone()
             if row:

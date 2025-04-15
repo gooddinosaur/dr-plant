@@ -5,12 +5,12 @@ from api.database import pool
 router = APIRouter()
 
 
-@router.get("/descriptive-stats")
-def get_descriptive_statistics():
+@router.get("/data")
+def fetch_data():
     try:
         conn = pool.connection()
         with conn.cursor() as cursor:
-            cursor.execute(f"SELECT * FROM drplantdata")
+            cursor.execute("SELECT * FROM drplantdata")
             columns = [desc[0] for desc in cursor.description]
             rows = cursor.fetchall()
             df = pd.DataFrame(rows, columns=columns)
@@ -23,10 +23,6 @@ def get_descriptive_statistics():
     if df.empty:
         raise HTTPException(status_code=404, detail="No data found.")
 
-    if 'id' in df.columns:
-        df = df.drop(columns=['id'])
-
-    numeric_df = df.select_dtypes(include=['float64', 'int64'])
-    desc_stats = numeric_df.describe().T.round(2).to_dict()
-
-    return desc_stats
+    df['timestamp'] = pd.to_datetime(df['timestamp']).dt.strftime(
+        "%Y-%m-%d %H:%M:%S")
+    return df.to_dict(orient="records")

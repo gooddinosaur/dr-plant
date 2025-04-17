@@ -32,7 +32,7 @@ st.markdown("""
     .intro-text {
         background-color: white;
         padding: 15px 20px;
-        border-radius: 8px;
+        border-radius: 16px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         margin-bottom: 20px;
     }
@@ -48,7 +48,7 @@ st.markdown("""
     }
     .sensor-card {
         background-color: white;
-        border-radius: 8px;
+        border-radius: 16px;
         padding: 20px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         text-align: center;
@@ -124,78 +124,80 @@ st.markdown(
 )
 
 # Sensor data display
-try:
-    # API call
-    response = requests.get("http://localhost:8000/latest-data")
+# Sensor data display
+with st.spinner("Fetching latest sensor data..."):
+    try:
+        # API call
+        response = requests.get("http://localhost:8000/latest-data")
 
-    if response.status_code == 200:
-        data = response.json()
+        if response.status_code == 200:
+            data = response.json()
 
-        # Create columns for sensor data
-        col1, col2, col3, col4 = st.columns(4)
+            # Create columns for sensor data
+            col1, col2, col3, col4 = st.columns(4)
 
-        with col1:
+            with col1:
+                st.markdown(
+                    f"""
+                    <div class="sensor-card">
+                        <div class="sensor-icon">🌡️</div>
+                        <div class="sensor-label">Temperature (°C)</div>
+                        <div class="sensor-value">{data['temperature']}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            with col2:
+                st.markdown(
+                    f"""
+                    <div class="sensor-card">
+                        <div class="sensor-icon">💧</div>
+                        <div class="sensor-label">Humidity (%)</div>
+                        <div class="sensor-value">{data['humidity']}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            with col3:
+                st.markdown(
+                    f"""
+                    <div class="sensor-card">
+                        <div class="sensor-icon">🌞</div>
+                        <div class="sensor-label">Light Intensity (lux)</div>
+                        <div class="sensor-value">{data['light']}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            with col4:
+                st.markdown(
+                    f"""
+                    <div class="sensor-card">
+                        <div class="sensor-icon">🌱</div>
+                        <div class="sensor-label">Soil Moisture (%)</div>
+                        <div class="sensor-value">{data['soil']}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+
+            # Timestamp display
+            timestamp = datetime.fromisoformat(data['timestamp']).strftime(
+                '%Y-%m-%d %H:%M:%S')
             st.markdown(
                 f"""
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌡️</div>
-                    <div class="sensor-label">Temperature (°C)</div>
-                    <div class="sensor-value">{data['temperature']}</div>
+                <div class="timestamp-container">
+                    <div class="timestamp">🕒 Time: {timestamp}</div>
                 </div>
                 """,
                 unsafe_allow_html=True
             )
 
-        with col2:
-            st.markdown(
-                f"""
-                <div class="sensor-card">
-                    <div class="sensor-icon">💧</div>
-                    <div class="sensor-label">Humidity (%)</div>
-                    <div class="sensor-value">{data['humidity']}</div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        else:
+            st.error("❌ Could not fetch data from API.")
 
-        with col3:
-            st.markdown(
-                f"""
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌞</div>
-                    <div class="sensor-label">Light Intensity (lux)</div>
-                    <div class="sensor-value">{data['light']}</div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-        with col4:
-            st.markdown(
-                f"""
-                <div class="sensor-card">
-                    <div class="sensor-icon">🌱</div>
-                    <div class="sensor-label">Soil Moisture (%)</div>
-                    <div class="sensor-value">{data['soil']}</div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-        # Timestamp display
-        timestamp = datetime.fromisoformat(data['timestamp']).strftime(
-            '%Y-%m-%d %H:%M:%S')
-        st.markdown(
-            f"""
-            <div class="timestamp-container">
-                <div class="timestamp">🕒 Time: {timestamp}</div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    else:
-        st.error("❌ Could not fetch data from API.")
-
-except Exception as e:
-    st.error(f"❌ Error connecting to API: {e}")
+    except Exception as e:
+        st.error(f"❌ Error connecting to API: {e}")

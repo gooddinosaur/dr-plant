@@ -26,6 +26,32 @@ try:
     y_attr = st.sidebar.selectbox("Select Y-axis Attribute",
                                   options=attribute_options, index=1)
 
+    st.sidebar.markdown("""
+        <style>
+        div.stButton > button {
+            background-color: #2196F3;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        div.stButton > button:hover {
+            background-color: #0b7dda;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        div.stButton > button:active {
+            transform: translateY(0px);
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    generate_button = st.sidebar.button("🔄 Generate Scatter Plot",
+                                        use_container_width=True)
+
     x_attr = x_attr.lower()
     y_attr = y_attr.lower()
     st.title("🔍 Scatter Plot : Attribute Relationship")
@@ -35,27 +61,23 @@ try:
 
     if x_attr == y_attr:
         st.warning("Please select two different attributes.")
-    else:
-        # Added a button to generate the scatter plot
-        generate_button = st.button("Generate Scatter Plot", type="primary",
-                                    use_container_width=True)
+    elif generate_button:
+        with st.spinner("Generating scatter plot..."):
+            image_url = f"http://localhost:8000/scatter-plot?x_attr={x_attr}&y_attr={y_attr}"
+            response = requests.get(image_url)
 
-        if generate_button:
-            with st.spinner("Generating scatter plot..."):
-                image_url = f"http://localhost:8000/scatter-plot?x_attr={x_attr}&y_attr={y_attr}"
-                response = requests.get(image_url)
-
-            if response.status_code == 200:
-                st.image(response.content,
-                         caption=f"{y_attr.capitalize()} vs {x_attr.capitalize()}",
-                         width=1000)
-                with st.expander("📄 View Raw Data"):
-                    st.dataframe(df[[x_attr, y_attr]])
-            else:
-                st.error(
-                    f"Failed to load scatter plot: {response.status_code} - {response.text}")
+        if response.status_code == 200:
+            st.image(response.content,
+                     caption=f"{y_attr.capitalize()} vs {x_attr.capitalize()}",
+                     width=1000)
+            with st.expander("📄 View Raw Data"):
+                st.dataframe(df[[x_attr, y_attr]])
         else:
-            st.info("👆 Click the button above to generate the scatter plot.")
+            st.error(
+                f"Failed to load scatter plot: {response.status_code} - {response.text}")
+    else:
+        st.info(
+            "👈 Select your attributes and click 'Generate Scatter Plot' in the sidebar to create the visualization.")
 
 except Exception as e:
     st.error(f"Error fetching or processing data: {e}")

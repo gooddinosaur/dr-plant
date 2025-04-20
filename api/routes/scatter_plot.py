@@ -2,6 +2,8 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 import pandas as pd
 import requests
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 from io import BytesIO

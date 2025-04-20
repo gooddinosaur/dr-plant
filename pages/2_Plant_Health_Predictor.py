@@ -127,21 +127,38 @@ if predict_button:
         light = float(light_input)
         humidity = float(humidity_input)
 
-        result = predict_health(moisture, light, temperature, humidity)
-        recommendations = generate_recommendations(moisture, humidity, light, temperature)
+        # ตรวจสอบว่าค่าทุกตัวอยู่ในช่วงที่กำหนด
+        if not (0 <= moisture <= 100):
+            raise ValueError("Soil Moisture must be between 0 and 100.")
+        if not (0 <= light <= 2000):
+            raise ValueError("Light Intensity must be between 0 and 2000.")
+        if not (0 <= temperature <= 60):
+            raise ValueError("Temperature must be between 0 and 60.")
+        if not (0 <= humidity <= 100):
+            raise ValueError("Humidity must be between 0 and 100.")
 
+        # แสดงผลลัพธ์การพยากรณ์สุขภาพพืช
+        result = predict_health(moisture, light, temperature, humidity)
         st.markdown(
             f"""
             <div class="result-container">
                 <div class="health-result">
-                    🩺 Plant Health Prediction: {result}
+                    🩺 <strong>Plant Health Prediction:</strong> {result}
                 </div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+        recommendations = generate_recommendations(moisture, humidity, light, temperature)
+        st.markdown(
+            f"""
+            <div class="result-container">
                 <h3 style="color: #2e7d32; margin-bottom: 15px;">🌱 Personalized Care Recommendations:</h3>
                 <div class="recommendation-container">
             """,
             unsafe_allow_html=True
         )
-
         for tip in recommendations:
             st.markdown(
                 f"""
@@ -151,12 +168,11 @@ if predict_button:
                 """,
                 unsafe_allow_html=True
             )
-
         st.markdown("</div></div>", unsafe_allow_html=True)
 
-    except ValueError:
+    except ValueError as e:
         st.markdown(
-            """
+            f"""
             <div class="info-card" style="background-color: #f8d7da; color: #721c24;">
                 ⚠️ Please fill in all inputs with valid numbers.
             </div>

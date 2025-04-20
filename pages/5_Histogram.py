@@ -24,16 +24,22 @@ try:
         This histogram shows the distribution of **{selected_feature.capitalize()}** using **{bin_value} bins**.
     """)
 
-    with st.spinner("Generating histogram..."):
-        img_url = f"http://localhost:8000/histogram?feature={selected_feature}&bin_value={bin_value}"
-        response = requests.get(img_url)
+    # Added a button to generate the histogram
+    generate_button = st.button("Generate Histogram", type="primary", use_container_width=True)
 
-    if response.status_code == 200:
-        st.image(response.content, caption=f"Histogram of {selected_feature.capitalize()}", width=1000)
-        with st.expander("📄 View Raw Data"):
-            st.dataframe(df[[selected_feature]])
+    if generate_button:
+        with st.spinner("Generating histogram..."):
+            img_url = f"http://localhost:8000/histogram?feature={selected_feature}&bin_value={bin_value}"
+            response = requests.get(img_url)
+
+        if response.status_code == 200:
+            st.image(response.content, caption=f"Histogram of {selected_feature.capitalize()}", width=1000)
+            with st.expander("📄 View Raw Data"):
+                st.dataframe(df[[selected_feature]])
+        else:
+            st.error(f"Failed to generate histogram: {response.status_code} - {response.text}")
     else:
-        st.error(f"Failed to generate histogram: {response.status_code} - {response.text}")
+        st.info("👆 Click the button above to generate the histogram.")
 
 except Exception as e:
     st.error(f"Error fetching or processing data: {e}")

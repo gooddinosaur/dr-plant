@@ -16,20 +16,18 @@ st.markdown("""
         display: flex;
         align-items: center;
         gap: 10px;
-        margin-bottom: 20px;
     }
     .main-title {
         color: #2e7d32;
         font-size: 2.5rem;
         font-weight: 600;
-        margin-bottom: 0;
         padding-top: 20px;
         padding-bottom: 10px;
     }
     .info-card {
         background-color: white;
         padding: 15px 20px;
-        border-radius: 8px;
+        border-radius: 16px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         margin-bottom: 20px;
     }
@@ -39,13 +37,13 @@ st.markdown("""
         gap: 10px;
         font-size: 1.5rem;
         font-weight: 500;
-        color: #2e7d32;
+        color: #000000;
         margin-top: 20px;
         margin-bottom: 15px;
     }
     .weather-card {
         background-color: white;
-        border-radius: 8px;
+        border-radius: 16px;
         padding: 20px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         margin-bottom: 20px;
@@ -100,11 +98,11 @@ if weather_ip:
             <div style="display: flex;">
                 <div style="flex: 1; text-align: center;">
                     <p style="font-size: 18px; color: #616161;">Temperature</p>
-                    <p style="font-size: 2rem; color: #2e7d32; font-weight: 600;">{weather_ip['temp']} °C</p>
+                    <p style="font-size: 2rem; color: #000000; font-weight: 550;">{weather_ip['temp']} °C</p>
                 </div>
                 <div style="flex: 1; text-align: center;">
                     <p style="font-size: 18px; color: #616161;">Humidity</p>
-                    <p style="font-size: 2rem; color: #2e7d32; font-weight: 600;">{weather_ip['humidity']} %</p>
+                    <p style="font-size: 2rem; color: #000000; font-weight: 550;">{weather_ip['humidity']} %</p>
                 </div>
             </div>
         </div>
@@ -165,11 +163,11 @@ if submitted:
                             <div style="display: flex; gap: 20px;">
                                 <div style="flex: 1; text-align: center;">
                                     <p style="font-size: 18px; color: #616161;">Temperature</p>
-                                    <p style="font-size: 2rem; color: #2e7d32; font-weight: 600;">{data['temp']} °C</p>
+                                    <p style="font-size: 2rem; color: #000000; font-weight: 550;">{data['temp']} °C</p>
                                 </div>
                                 <div style="flex: 1; text-align: center;">
                                     <p style="font-size: 18px; color: #616161;">Humidity</p>
-                                    <p style="font-size: 2rem; color: #2e7d32; font-weight: 600;">{data['humidity']} %</p>
+                                    <p style="font-size: 2rem; color: #000000; font-weight: 550;">{data['humidity']} %</p>
                                 </div>
                             </div>
                         </div>

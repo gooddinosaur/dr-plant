@@ -28,20 +28,20 @@ st.markdown("""
     .info-card {
         background-color: white;
         padding: 15px 20px;
-        border-radius: 8px;
+        border-radius: 16px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         margin-bottom: 20px;
     }
     .input-container {
         background-color: white;
-        border-radius: 8px;
+        border-radius: 16px;
         padding: 5px 20px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         margin-bottom: 30px;
     }
     .result-container {
         background-color: white;
-        border-radius: 8px;
+        border-radius: 16px;
         padding: 20px;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         margin-top: 20px;
@@ -52,7 +52,7 @@ st.markdown("""
         font-weight: 600;
         text-align: center;
         padding: 15px;
-        border-radius: 8px;
+        border-radius: 16px;
     }
     .health-result-healthy {
         color: #2e7d32;
@@ -65,25 +65,6 @@ st.markdown("""
     .health-result-high {
         color: #c62828;
         background-color: #ffebee;
-    }
-    .recommendation-header {
-        background-color: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
-    .recommendation-container {
-        background-color: white;
-        border-radius: 8px;
-        padding: 15px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    .recommendation-items {
-        background-color: #f5f5f5;
-        border-radius: 8px;
-        padding: 15px;
     }
     .recommendation-item {
         padding: 8px 0;

@@ -19,3 +19,5 @@ Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
+# ALAWARD
+will add more :D

@@ -135,10 +135,13 @@ if predict_button:
         if '' in [moisture_input, temperature_input, light_input, humidity_input]:
             raise ValueError("All fields are required.")
 
-        moisture = float(moisture_input)
-        temperature = float(temperature_input)
-        light = float(light_input)
-        humidity = float(humidity_input)
+        try:
+            moisture = float(moisture_input)
+            temperature = float(temperature_input)
+            light = float(light_input)
+            humidity = float(humidity_input)
+        except ValueError:
+            raise ValueError("Please enter numbers only for all fields.")
 
         # ตรวจสอบว่าค่าทุกตัวอยู่ในช่วงที่กำหนด
         if not (0 <= moisture <= 100):

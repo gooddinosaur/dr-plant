@@ -65,4 +65,4 @@ python -m uvicorn api.main:app --reload --port 8000
 
 ---
 ## 📃 Project Documents
-All project documents are in the [Project Wiki](../../wiki/Home).
+All project documents are in the [Project Wiki](../../wiki/Home) (Diagrams, Presentation Slide).

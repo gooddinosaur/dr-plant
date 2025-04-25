@@ -11,6 +11,7 @@ A machine learning model analyzes:
 
 Based on this analysis, the system suggests ways to improve growing conditions.  
 Users can also explore interactive charts and historical data to better understand their plant's needs.
+
 ---
 
 ## ✅ Features
